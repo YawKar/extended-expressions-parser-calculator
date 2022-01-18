@@ -34,3 +34,31 @@ int are_equal_strings (char* str1, char* str2) {
     return 1;
 }
 
+char* get_line () {
+    char* line = (char*) malloc(100);
+    char* linep = line;
+    size_t lenmax = 100;
+    size_t len = lenmax;
+    int ch;
+    if (line == NULL)
+        return NULL;
+    for (;;) {
+        ch = fgetc(stdin);
+        if (ch == EOF)
+            break;
+        if (--len == 0) {
+            len = lenmax;
+            char* linen = realloc(linep, lenmax *= 2);
+            if (linen == NULL) {
+                free(linep);
+                return NULL;
+            }
+            line = linen + (line - linep);
+            linep = linen;
+        }
+        if ((*line++ = ch) == '\n')
+            break;
+    }
+    *line = '\0';
+    return linep;
+}
