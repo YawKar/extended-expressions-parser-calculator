@@ -1,0 +1,7 @@
+#include "NodeTypes.h"
+#include "BaseNode.h"
+#include "NumberNode.h"
+#include "OperatorNode.h"
+#include "StdFunctionNode.h"
+#include "ConstantNode.h"
+#include "VariableNode.h"

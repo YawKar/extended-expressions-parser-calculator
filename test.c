@@ -16,7 +16,7 @@ int is_forbidden_char (char ch) {
 }
 
 int is_operator (char ch) {
-    char* operators = "^*/+-\0";
+    char* operators = "^*/+-\0";    
     int operators_len = strlen(operators);
     for (int i = 0; i < operators_len; ++i)
         if (operators[i] == ch)
@@ -644,7 +644,6 @@ long double eval_base_node (BaseNode* root) {
 }
 
 int main () {
-    long double res=  pow(2L, 10L);
     char* raw_expression = get_line();
     char* expression = prettify_expression(raw_expression);
     int expression_length = strlen(expression);
