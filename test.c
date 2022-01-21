@@ -66,6 +66,8 @@ int count_ends_brackets (char* expression, int left, int right) {
     while (right - left - 2 * ends_brackets > 1) {
         if (is_bracketed(expression, left + ends_brackets, right - ends_brackets))
             ++ends_brackets;
+        else
+            break;
     }
     return ends_brackets;
 }
@@ -98,7 +100,7 @@ int get_max_operator_index (char* expression, int left, int right) {
     int operators_len = strlen(operators);
     int cur_level = 0;
     int max_operator_index = -1;
-    int max_operator_order = 1000;
+    int max_operator_order = -1;
     for (int i = left; i < right; ++i) {
         if (expression[i] == '(') {
             ++cur_level;
@@ -112,7 +114,7 @@ int get_max_operator_index (char* expression, int left, int right) {
             continue;
         for (int j = 0; j < operators_len; ++j) {
             if (expression[i] == operators[j]) {
-                if (j < max_operator_order) {
+                if (j > max_operator_order) {
                     max_operator_order = j;
                     max_operator_index = i;
                 }
@@ -289,7 +291,7 @@ int is_stdfunction(char* expression, int left, int right) {
     int stdFuncNumber = 14;
     for (int funcIndex = 0; funcIndex < stdFuncNumber; ++funcIndex) {
         int stdFuncLen = strlen(stdFunctions[funcIndex]);
-        if (stdFuncLen != openBracketIndex)
+        if (stdFuncLen != openBracketIndex - left)
             continue;
         int areEqual = 1;
         for (int j = 0; j < stdFuncLen; ++j)
@@ -331,7 +333,7 @@ StdFunctionType get_stdfunc_type(char* expression, int left, int right) {
     int stdFuncNumber = 14;
     for (int funcIndex = 0; funcIndex < stdFuncNumber; ++funcIndex) {
         int stdFuncLen = strlen(stdFunctions[funcIndex]);
-        if (stdFuncLen != openBracketIndex)
+        if (stdFuncLen != openBracketIndex - left)
             continue;
         int areEqual = 1;
         for (int j = 0; j < stdFuncLen; ++j)
@@ -417,6 +419,19 @@ void parse_arguments (char* expression, int left, int right, OperandsContainer* 
             lastComma = i;
         }
     }
+    // LAST ARGUMENT
+    BaseNode* newOperand = new_base_node();
+    add_operand_to_operands_container(newOperand, operands);
+    parse_expression(newOperand, expression, lastComma + 1, right - 1);
+}
+
+char* get_var_name (char* expression, int left, int right) {
+    char* var_name = (char*) malloc(sizeof(char) * (right - left + 1));
+    for (int i = left; i < right; ++i) {
+        var_name[i - left] = expression[i];
+    }
+    var_name[right - left] = '\0';
+    return var_name;
 }
 
 void parse_expression (BaseNode* root, char* expression, int left, int right) {
@@ -475,8 +490,8 @@ void parse_expression (BaseNode* root, char* expression, int left, int right) {
         OperatorNode* opNode = (OperatorNode*) root->realNode;
         BaseNode* leftOperand = new_base_node();
         BaseNode* rightOperand = new_base_node();
-        add_operand_to_oper_node(opNode, leftOperand);
-        add_operand_to_oper_node(opNode, rightOperand);
+        add_operand_to_operands_container(leftOperand, opNode->operands);
+        add_operand_to_operands_container(rightOperand, opNode->operands);
         parse_expression(leftOperand, expression, left, max_operator_index);
         parse_expression(rightOperand, expression, max_operator_index + 1, right);
     } else if (is_number(expression, left, right)) {
@@ -490,14 +505,31 @@ void parse_expression (BaseNode* root, char* expression, int left, int right) {
         // A constant: e, PI;
         ConstantNode* consNode = (ConstantNode*) malloc(sizeof(ConstantNode));
         consNode->constantType = get_constant_type(expression, left, right);
+        root->nodeType = CONSTANT_NODE;
         root->realNode = (void*) consNode;
     } else if (is_stdfunction(expression, left, right)) {
         // A std function: cos, sin...
         StdFunctionNode* stdFuncNode = (StdFunctionNode*) malloc(sizeof(StdFunctionNode));
         stdFuncNode->stdFunctionType = get_stdfunc_type(expression, left, right);
         stdFuncNode->operands = new_operands_container();
+        root->nodeType = STDFUNCTION_NODE;
         root->realNode = (void*) stdFuncNode;
         parse_arguments(expression, left, right, stdFuncNode->operands);
+    } else {
+        // A variable;
+        root->nodeType = VARIABLE_NODE;
+        char* variableName = get_var_name(expression, left, right);
+        if (isVariableInTable(varsTable, variableName)) {
+            // Already exists
+            root->realNode = (void*) get_variable_node_by_name(varsTable, variableName);
+        } else {
+            // Doesn't exist
+            VariableNode* varNode = (VariableNode*) malloc(sizeof(VariableNode));
+            varNode->variableName = variableName;
+            varNode->operands = new_operands_container();
+            root->realNode = (void*) varNode;
+            addVariableToTable(varsTable, varNode);
+        }
     }
 }
 
@@ -616,8 +648,8 @@ int main () {
     char* raw_expression = get_line();
     char* expression = prettify_expression(raw_expression);
     int expression_length = strlen(expression);
-    BaseNode* root = (BaseNode*) malloc(sizeof(BaseNode));
+    BaseNode* root = new_base_node();
     parse_expression(root, expression, 0, expression_length);
-    printf("Evaluate: %llf", eval_base_node(root));
+    printf("Evaluate: %Lf", eval_base_node(root));
     return 0;
 }
