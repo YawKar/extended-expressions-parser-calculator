@@ -113,7 +113,6 @@
     <ClCompile Include="StdFunctionNode.c" />
     <ClCompile Include="StdFunctionTypes.c" />
     <ClCompile Include="StringFunctions.c" />
-    <ClCompile Include="test.c" />
     <ClCompile Include="VariablesTable.c" />
   </ItemGroup>
   <ItemGroup>
@@ -124,7 +123,6 @@
     <ClInclude Include="EvaluateNodesFunctions.h" />
     <ClInclude Include="ExpressionFunctions.h" />
     <ClInclude Include="InputFunctions.h" />
-    <ClInclude Include="nodes.h" />
     <ClInclude Include="NodeTypes.h" />
     <ClInclude Include="NumberNode.h" />
     <ClInclude Include="OperandsContainer.h" />

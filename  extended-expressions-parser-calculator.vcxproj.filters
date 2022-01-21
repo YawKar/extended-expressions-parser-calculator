@@ -21,9 +21,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="test.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="StringFunctions.c">
       <Filter>Source Files\Refactored</Filter>
     </ClCompile>
@@ -74,9 +71,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="nodes.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="BaseNode.h">
       <Filter>Header Files\Refactored</Filter>
     </ClInclude>

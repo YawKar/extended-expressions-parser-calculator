@@ -33,8 +33,56 @@ long double evaluateConstantNode(ConstantNode* constantNode) {
 	return 0L;
 }
 
-long double evaluateStdFunctionNode(StdFunctionNode* stdFunctionNode) {
+long double logWithBase(long double base, long double value) {
+    return log(value) / log(base);
+}
 
+long double evaluateStdFunctionNode(StdFunctionNode* stdFunctionNode) {
+	long double arg1 = 0L;
+	long double arg2 = 0L;
+	long double arg3 = 0L;
+	switch (stdFunctionNode->stdFunctionType) {
+		case COS_FUNC:
+			arg1 = evaluateBaseNode(stdFunctionNode->operands->operands[0]);
+			return cos(arg1);
+		case SIN_FUNC:
+			arg1 = evaluateBaseNode(stdFunctionNode->operands->operands[0]);
+			return sin(arg1);
+		case TG_FUNC:
+			arg1 = evaluateBaseNode(stdFunctionNode->operands->operands[0]);
+			return tan(arg1);
+		case CTG_FUNC:
+			arg1 = evaluateBaseNode(stdFunctionNode->operands->operands[0]);
+			return cos(arg1) / sin(arg1);
+		case LOG_FUNC:
+			arg1 = evaluateBaseNode(stdFunctionNode->operands->operands[0]);
+			arg2 = evaluateBaseNode(stdFunctionNode->operands->operands[1]);
+			return logWithBase(arg1, arg2);
+		case LN_FUNC:
+			arg1 = evaluateBaseNode(stdFunctionNode->operands->operands[0]);
+			return log(arg1);
+		case SQRT_FUNC:
+			arg1 = evaluateBaseNode(stdFunctionNode->operands->operands[0]);
+			return sqrt(arg1);
+		case POW_FUNC:
+			arg1 = evaluateBaseNode(stdFunctionNode->operands->operands[0]);
+			arg2 = evaluateBaseNode(stdFunctionNode->operands->operands[1]);
+			return pow(arg1, arg2);
+		case ABS_FUNC:
+			arg1 = evaluateBaseNode(stdFunctionNode->operands->operands[0]);
+			return fabs(arg1);
+		case EXP_FUNC:
+			arg1 = evaluateBaseNode(stdFunctionNode->operands->operands[0]);
+			return exp(arg1);
+		case REAL_FUNC:
+			return 0L;
+		case IMAG_FUNC:
+			return 0L;
+		case MAG_FUNC:
+			return 0L;
+		case PHASE_FUNC:
+			return 0L;
+	}
 }
 
 long double evaluateBaseNode(BaseNode* baseNode) {
