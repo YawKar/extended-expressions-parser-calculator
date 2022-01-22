@@ -7,4 +7,6 @@ struct VariableNode {
     char* variableName;
     OperandsContainer* operands;
 };
+
+VariableNode* newVariableNode();
 #endif

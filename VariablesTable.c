@@ -2,37 +2,61 @@
 #include "StringFunctions.h"
 #include <stdlib.h>
 
-int isVariableInTable(VariablesTable* varsTable, char* variableName) {
-    for (int i = 0; i < varsTable->variablesNumber; ++i) {
-        if (areStringsEqual(varsTable->variablesNames[i], variableName))
+VariablesTable* newVariablesTable() {
+    VariablesTable* variablesTable = (VariablesTable*)malloc(sizeof(VariablesTable));
+    variablesTable->variablesNames = NULL;
+    variablesTable->variablesNodes = NULL;
+    variablesTable->variablesNumber = 0;
+    return variablesTable;
+}
+
+int isVariableInTable(VariablesTable* variablesTable, char* variableName) {
+    for (int i = 0; i < variablesTable->variablesNumber; ++i) {
+        if (areStringsEqual(variablesTable->variablesNames[i], variableName))
             return 1;
     }
     return 0;
 }
 
-int indexOfVariableInTable(VariablesTable* varsTable, char* variableName) {
-    for (int i = 0; i < varsTable->variablesNumber; ++i) {
-        if (areStringsEqual(varsTable->variablesNames[i], variableName))
+int indexOfVariableInTable(VariablesTable* variablesTable, char* variableName) {
+    for (int i = 0; i < variablesTable->variablesNumber; ++i) {
+        if (areStringsEqual(variablesTable->variablesNames[i], variableName))
             return i;
     }
     return -1;
 }
 
-void addVariableToTable(VariablesTable* varsTable, VariableNode* varNode) {
-    if (isVariableInTable(varsTable, varNode->variableName)) {
-        int varIndex = indexOfVariableInTable(varsTable, varNode->variableName);
-        varsTable->variablesNodes[varIndex] = varNode;
+void addVariableNameToTable(VariablesTable* variablesTable, char* variableName) {
+    if (isVariableInTable(variablesTable, variableName)) {
+        // Variable already exists
         return;
     }
-    else {
-        char** newVariablesNames = (char**)malloc(sizeof(char*) * (varsTable->variablesNumber + 1));
-        VariableNode** newVariablesNodes = (VariableNode**)malloc(sizeof(VariableNode*) * (varsTable->variablesNumber + 1));
-        for (int i = 0; i < varsTable->variablesNumber; ++i) {
-            newVariablesNames[i] = varsTable->variablesNames[i];
-            newVariablesNodes[i] = varsTable->variablesNodes[i];
-        }
-        newVariablesNames[varsTable->variablesNumber] = varNode->variableName;
-        newVariablesNodes[varsTable->variablesNumber] = varNode;
-        ++varsTable->variablesNumber;
+    char** newVariablesNames = (char**)malloc(sizeof(char*) * (variablesTable->variablesNumber + 1));
+    VariableNode** newVariablesNodes = (VariableNode**)malloc(sizeof(VariableNode*) * (variablesTable->variablesNumber + 1));
+    for (int currentIndex = 0; currentIndex < variablesTable->variablesNumber; ++currentIndex) {
+        newVariablesNames[currentIndex] = variablesTable->variablesNames[currentIndex];
+        newVariablesNodes[currentIndex] = variablesTable->variablesNodes[currentIndex];
     }
+    newVariablesNames[variablesTable->variablesNumber] = copyString(variableName);
+    newVariablesNodes[variablesTable->variablesNumber] = NULL;
+    variablesTable->variablesNames = newVariablesNames;
+    variablesTable->variablesNodes = newVariablesNodes;
+    ++variablesTable->variablesNumber;
+}
+
+void assignNodeForVariableInTable(VariablesTable* variablesTable, char* variableName, VariableNode* variableNode) {
+    int variableIndex = indexOfVariableInTable(variablesTable, variableName);
+    if (variableIndex == -1) {
+        // Doesn't exist
+        addVariableNameToTable(variablesTable, variableName);
+        variableIndex = indexOfVariableInTable(variablesTable, variableName);
+    }
+    variablesTable->variablesNodes[variableIndex] = variableNode;
+}
+
+VariableNode* getVariableNodeFromTable(VariablesTable* variablesTable, char* variableName) {
+    int variableIndex = indexOfVariableInTable(variablesTable, variableName);
+    if (variableIndex == -1)
+        return NULL;
+    return variablesTable->variablesNodes[variableIndex];
 }

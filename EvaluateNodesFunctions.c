@@ -2,6 +2,10 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
+long double evaluateVariableNode(VariableNode* variableNode) {
+	return evaluateBaseNode(variableNode->operands->operands[0]);
+}
+
 long double evaluateNumberNode(NumberNode* numberNode) {
 	return numberNode->number;
 }
@@ -95,6 +99,8 @@ long double evaluateBaseNode(BaseNode* baseNode) {
 		return evaluateConstantNode((ConstantNode*)baseNode->realNode);
 	case STDFUNCTION_NODE:
 		return evaluateStdFunctionNode((StdFunctionNode*)baseNode->realNode);
+	case VARIABLE_NODE:
+		return evaluateVariableNode((VariableNode*)baseNode->realNode);
 	}
 	return 0L;
 }

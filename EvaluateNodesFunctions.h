@@ -7,4 +7,5 @@ long double evaluateNumberNode(NumberNode* numberNode);
 long double evaluateOperatorNode(OperatorNode* operatorNode);
 long double evaluateConstantNode(ConstantNode* constantNode);
 long double evaluateStdFunctionNode(StdFunctionNode* stdFunctionNode);
+long double evaluateVariableNode(VariableNode* variableNode);
 #endif

@@ -1,11 +1,10 @@
 #include "Parser.h"
 #include "ExpressionFunctions.h"
-#include "OperatorNode.h"
-#include "NumberNode.h"
-#include "ConstantNode.h"
-#include "StdFunctionNode.h"
+#include "AllNodes.h"
+#include "VariablesTable.h"
+#include "StringFunctions.h"
 
-void parseArguments(char* expression, int leftBorder, int rightBorder, OperandsContainer* operandsContainer) {
+void parseArguments(char* expression, int leftBorder, int rightBorder, OperandsContainer* operandsContainer, VariablesTable* variablesTable) {
 	int openBracketIndex = -1;
 	for (int i = leftBorder; i < rightBorder; ++i) {
 		if (expression[i] == '(') {
@@ -30,17 +29,17 @@ void parseArguments(char* expression, int leftBorder, int rightBorder, OperandsC
 			// Found argument
 			BaseNode* newOperand = newBaseNode();
 			addOperandToOperandsContainer(newOperand, operandsContainer);
-			parseExpression(newOperand, expression, lastCommaIndex + 1, i);
+			parseExpression(newOperand, expression, lastCommaIndex + 1, i, variablesTable);
 			lastCommaIndex = i;
 		}
 	}
 	// Last argument
 	BaseNode* newOperand = newBaseNode();
 	addOperandToOperandsContainer(newOperand, operandsContainer);
-	parseExpression(newOperand, expression, lastCommaIndex + 1, rightBorder - 1);
+	parseExpression(newOperand, expression, lastCommaIndex + 1, rightBorder - 1, variablesTable);
 }
 
-void parseExpression(BaseNode* root, char* expression, int leftBorder, int rightBorder) {
+void parseExpression(BaseNode* root, char* expression, int leftBorder, int rightBorder, VariablesTable* variablesTable) {
 	if (isExpressionBracketed(expression, leftBorder, rightBorder)) {
 		int endsBracketsNumber = countEndsBrackets(expression, leftBorder, rightBorder);
 		leftBorder += endsBracketsNumber;
@@ -59,8 +58,8 @@ void parseExpression(BaseNode* root, char* expression, int leftBorder, int right
 		BaseNode* rightOperand = newBaseNode();
 		addOperandToOperandsContainer(leftOperand, operatorNode->operands);
 		addOperandToOperandsContainer(rightOperand, operatorNode->operands);
-		parseExpression(leftOperand, expression, leftBorder, highestOperatorIndex);
-		parseExpression(rightOperand, expression, highestOperatorIndex + 1, rightBorder);
+		parseExpression(leftOperand, expression, leftBorder, highestOperatorIndex, variablesTable);
+		parseExpression(rightOperand, expression, highestOperatorIndex + 1, rightBorder, variablesTable);
 	}
 	else if (doesExpressionContainNumberOnTop(expression, leftBorder, rightBorder)) {
 		// Number Node Entry
@@ -84,6 +83,25 @@ void parseExpression(BaseNode* root, char* expression, int leftBorder, int right
 		root->realNode = (void*)stdFunctionNode;
 		stdFunctionNode->operands = newOperandsContainer();
 		stdFunctionNode->stdFunctionType = getStdFunctionType(expression, leftBorder, rightBorder);
-		parseArguments(expression, leftBorder, rightBorder, stdFunctionNode->operands);
+		parseArguments(expression, leftBorder, rightBorder, stdFunctionNode->operands, variablesTable);
+	}
+	else {
+		// Variable Entry
+		root->nodeType = VARIABLE_NODE;
+		char* variableName = (char*)malloc(sizeof(char) * (rightBorder - leftBorder + 1));
+		for (int i = leftBorder; i < rightBorder; ++i) {
+			variableName[i - leftBorder] = expression[i];
+		}
+		variableName[rightBorder - leftBorder] = '\0';
+		if (isVariableInTable(variablesTable, variableName)) {
+			root->realNode = (void*)getVariableNodeFromTable(variablesTable, variableName);
+		}
+		else {
+			addVariableNameToTable(variablesTable, variableName);
+			VariableNode* variableNode = newVariableNode();
+			variableNode->variableName = copyString(variableName);
+			assignNodeForVariableInTable(variablesTable, variableName, variableNode);
+			root->realNode = (void*)variableNode;
+		}
 	}
 }

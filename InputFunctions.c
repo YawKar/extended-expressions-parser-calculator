@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "InputFunctions.h"
 
-char* getLine() {
+char* getLine(FILE* inputStream) {
     char* line = (char*)malloc(100);
     char* linep = line;
     size_t lenmax = 100;
@@ -11,7 +11,7 @@ char* getLine() {
     if (line == NULL)
         return NULL;
     for (;;) {
-        ch = fgetc(stdin);
+        ch = fgetc(inputStream);
         if (ch == EOF)
             break;
         if (--len == 0) {

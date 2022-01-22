@@ -9,7 +9,10 @@ struct VariablesTable {
     VariableNode** variablesNodes;
 };
 
-int isVariableInTable(VariablesTable* varsTable, char* variableName);
-void addVariableToTable(VariablesTable* varsTable, VariableNode* varNode);
-int indexOfVariableInTable(VariablesTable* varsTable, char* variableName);
+VariablesTable* newVariablesTable();
+VariableNode* getVariableNodeFromTable(VariablesTable* variablesTable, char* variableName);
+int isVariableInTable(VariablesTable* variablesTable, char* variableName);
+void addVariableNameToTable(VariablesTable* variablesTable, char* variableName);
+void assignNodeForVariableInTable(VariablesTable* variablesTable, char* variableName, VariableNode* variableNode);
+int indexOfVariableInTable(VariablesTable* variablesTable, char* variableName);
 #endif

@@ -113,6 +113,7 @@
     <ClCompile Include="StdFunctionNode.c" />
     <ClCompile Include="StdFunctionTypes.c" />
     <ClCompile Include="StringFunctions.c" />
+    <ClCompile Include="VariableNode.c" />
     <ClCompile Include="VariablesTable.c" />
   </ItemGroup>
   <ItemGroup>
