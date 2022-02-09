@@ -1,8 +1,8 @@
 #ifndef _EXPRESSION_FUNCTIONS_HEADER
 #define _EXPRESSION_FUNCTIONS_HEADER
-#include "OperatorTypes.h"
-#include "ConstantTypes.h"
-#include "StdFunctionTypes.h"
+#include "../EnumTypes/OperatorTypes.h"
+#include "../EnumTypes/ConstantTypes.h"
+#include "../EnumTypes/StdFunctionTypes.h"
 
 char* prettifyExpressionCopy(char* expression);
 int isForbiddenCharacter(char ch);

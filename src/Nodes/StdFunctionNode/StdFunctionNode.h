@@ -1,7 +1,7 @@
 #ifndef _STD_FUNCTION_NODE_HEADER
 #define _STD_FUNCTION_NODE_HEADER
-#include "StdFunctionTypes.h"
-#include "OperandsContainer.h"
+#include "../../EnumTypes/StdFunctionTypes.h"
+#include "../../OperandsContainer/OperandsContainer.h"
 
 typedef struct StdFunctionNode StdFunctionNode;
 struct StdFunctionNode {

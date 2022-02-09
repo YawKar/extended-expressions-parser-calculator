@@ -1,7 +1,7 @@
 #ifndef _OPERATOR_NODE_HEADER
 #define _OPERATOR_NODE_HEADER
-#include "OperatorTypes.h"
-#include "OperandsContainer.h"
+#include "../../EnumTypes/OperatorTypes.h"
+#include "../../OperandsContainer/OperandsContainer.h"
 
 typedef struct OperatorNode OperatorNode;
 struct OperatorNode {

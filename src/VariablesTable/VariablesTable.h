@@ -1,6 +1,6 @@
 #ifndef _VARIABLES_TABLE_HEADER
 #define _VARIABLES_TABLE_HEADER
-#include "VariableNode.h"
+#include "../Nodes/VariableNode/VariableNode.h"
 
 typedef struct VariablesTable VariablesTable;
 struct VariablesTable {

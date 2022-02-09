@@ -1,6 +1,6 @@
 #ifndef _EVALUATE_NODES_FUNCTIONS_HEADER
 #define _EVALUATE_NODES_FUNCTIONS_HEADER
-#include "AllNodes.h"
+#include "../Nodes/AllNodes.h"
 
 long double evaluateBaseNode(BaseNode* baseNode);
 long double evaluateNumberNode(NumberNode* numberNode);

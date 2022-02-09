@@ -1,6 +1,6 @@
 #ifndef _CONSTANT_NODE_HEADER
 #define _CONSTANT_NODE_HEADER
-#include "ConstantTypes.h"
+#include "../../EnumTypes/ConstantTypes.h"
 
 typedef struct ConstantNode ConstantNode;
 struct ConstantNode {

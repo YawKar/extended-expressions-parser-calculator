@@ -1,5 +1,5 @@
 #include "OperatorNode.h"
-#include "OperandsContainer.h"
+#include "../../OperandsContainer/OperandsContainer.h"
 #include <stdlib.h>
 
 OperatorNode* newOperatorNode() {

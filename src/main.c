@@ -1,12 +1,13 @@
 #include <string.h>
 #include <stdio.h>
-#include "InputFunctions.h"
-#include "ExpressionFunctions.h"
-#include "BaseNode.h"
-#include "Parser.h"
-#include "EvaluateNodesFunctions.h"
-#include "VariablesTable.h"
-#include "StringFunctions.h"
+#include <stdlib.h>
+#include "InputFunctions/InputFunctions.h"
+#include "ExpressionFunctions/ExpressionFunctions.h"
+#include "Nodes/BaseNode/BaseNode.h"
+#include "Parser/Parser.h"
+#include "EvaluateNodesFunctions/EvaluateNodesFunctions.h"
+#include "VariablesTable/VariablesTable.h"
+#include "StringFunctions/StringFunctions.h"
 
 int main() {
 	printf("Enter the expression:\n");

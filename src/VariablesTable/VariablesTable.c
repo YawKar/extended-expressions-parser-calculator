@@ -1,5 +1,5 @@
 #include "VariablesTable.h"
-#include "StringFunctions.h"
+#include "../StringFunctions/StringFunctions.h"
 #include <stdlib.h>
 
 VariablesTable* newVariablesTable() {

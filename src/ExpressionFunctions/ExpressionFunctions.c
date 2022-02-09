@@ -2,9 +2,9 @@
 #include <stdlib.h>
 #include <math.h>
 #include "ExpressionFunctions.h"
-#include "OperatorTypes.h"
-#include "ConstantTypes.h"
-#include "StdFunctionTypes.h"
+#include "../EnumTypes/OperatorTypes.h"
+#include "../EnumTypes/ConstantTypes.h"
+#include "../EnumTypes/StdFunctionTypes.h"
 
 StdFunctionType getStdFunctionType(char* expression, int leftBorder, int rightBorder) {
     int openBracketIndex = -1;

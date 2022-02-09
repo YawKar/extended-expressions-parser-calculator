@@ -1,8 +1,9 @@
 #include "Parser.h"
-#include "ExpressionFunctions.h"
-#include "AllNodes.h"
-#include "VariablesTable.h"
-#include "StringFunctions.h"
+#include <stdlib.h>
+#include "../ExpressionFunctions/ExpressionFunctions.h"
+#include "../Nodes/AllNodes.h"
+#include "../VariablesTable/VariablesTable.h"
+#include "../StringFunctions/StringFunctions.h"
 
 void parseArguments(char* expression, int leftBorder, int rightBorder, OperandsContainer* operandsContainer, VariablesTable* variablesTable) {
 	int openBracketIndex = -1;
